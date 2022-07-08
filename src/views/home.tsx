@@ -1,12 +1,12 @@
-import  { useContext, FC } from "react";
+import { FC } from "react";
 import Button from "../components/button";
-import { GlobalContext } from "../context/globalState";
-import {  ProductContextType } from "../types";
+import { useProductListManagement } from "../context/useProductContext";
+import { PostData } from "../types";
 
 const Home: FC = () => {
-  const { products }: ProductContextType = useContext(GlobalContext);
-  const clickMe = () => {
-    console.log(products);
+  const { products, handleFetchProducts } = useProductListManagement();
+  const fakeData: Partial<PostData> = {
+    url: "http://localhost:3000/products",
   };
 
   return (
@@ -21,7 +21,7 @@ const Home: FC = () => {
             return <div key={product.name}>{product.name}</div>;
           })}
 
-          <Button onClick={clickMe}>Test People</Button>
+          <Button onClick={handleFetchProducts(fakeData)}>Test People</Button>
         </div>
       </div>
       <div className="grid grid-cols-1 mt-10 mx-auto mb-7 mt-5">
