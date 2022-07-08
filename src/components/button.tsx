@@ -1,12 +1,14 @@
-import React, { ReactNode } from "react";
+import React, { MouseEvent } from "react";
+import { IButton } from "../types";
 
-interface IButton {
-    children?: ReactNode
-}
 
-const Button:React.FC<IButton>  =({children, ...props})=>{
+const Button:React.FC<IButton>  =({children, onClick = () => {}, ...props})=>{
+    const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+        onClick(e);
+    };
+
     return (
-        <button className="rounded-md bg-primary hover:bg-hoverButton text-text-base px-3 py-1">
+        <button onClick={handleOnClick} className="rounded-md bg-button hover:bg-hoverButton text-text-base px-4 py-2 font-semibold hover:font-bold">
             {children}
         </button>
     )
