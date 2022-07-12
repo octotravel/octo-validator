@@ -1,6 +1,7 @@
 
 import React, { ReactNode, MouseEvent } from "react";
 
+
 export interface IButton {
     children?: ReactNode;
     props?: any;
@@ -29,20 +30,22 @@ export interface Flow {
 export interface ProductTimeStamps {
     productId: string;
     dateAvailable: Date;
-    dateNotAvailable: Date
-    deliveryMethods: string[]
+    dateNotAvailable: Date;
+    deliveryMethods: string;
 }
 
 export type ProductContextData = {
-    products: Flow[],
+    products: any[],
     isLoading: boolean;
     fetchProducts: (PostData) => void
 }
 
 export type PostData = {
-    url: string,
-    capabilities: string[],
-    productStartTimes: ProductTimeStamps,
-    productOpeningHours: ProductTimeStamps
+    hostname: string,
+    port: string,
+    endpoint:string,
+    capabilities: string,
+    productTimes: ProductTimeStamps[],
 }
+
 
