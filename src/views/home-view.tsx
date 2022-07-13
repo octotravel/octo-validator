@@ -1,9 +1,6 @@
-import { Grid, Box, Container,Button } from "@mui/material";
+import { Grid, Box, Container } from "@mui/material";
 import { FC } from "react";
-import FormInput from "../components.tsx/formInput";
 import Header from "../components.tsx/header";
-import SelectBox from "../components.tsx/select-box";
-import {capability, productTimes} from '../utils/constant'
 import FormInputView from "./form-view";
 
 const HomeView: FC = () => {

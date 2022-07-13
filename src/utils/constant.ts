@@ -1,32 +1,32 @@
 export const capability = [
     {
-      label: "content",
-      value: "octo/content",
+        label: "content",
+        value: "octo/content",
     },
     {
-      label: "pricing",
-      value: "octo/pricing",
+        label: "pricing",
+        value: "octo/pricing"
     },
-  ];
+];
 
-  export const productTimes = [
+export const productTimes = [
     {
-      label: "start simes",
-      value: "productStartTimes",
+        label: "start simes",
+        value: "productStartTimes",
     },
     {
-      label: "opening hours",
-      value: "productOpeningHours",
+        label: "opening hours",
+        value: "productOpeningHours"
     },
-  ];
+];
 
-  export const deliveryMethods = [
+export const deliveryMethods = [
     {
-      label: "voucher",
-      value: "voucher",
+        label: "voucher",
+        value: "VOUCHER"
     },
     {
-      label: "ticket",
-      value: "ticket",
+        label: "ticket",
+        value: "TICKET"
     },
-  ];
+];

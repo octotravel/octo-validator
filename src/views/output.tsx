@@ -5,6 +5,8 @@ import { useProductListManagement } from "../context/productContext";
 const OutputView: FC = () => {
   const { products } = useProductListManagement();
 
+  console.log(products);
+  
   return (
     <div>
       {/* <div className="mb-1 text-text-base font-normal text-sm">

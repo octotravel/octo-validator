@@ -1,18 +1,23 @@
 import { FC } from "react";
 import { Grid } from "@mui/material";
+import { useFormContext } from "react-hook-form";
 
 type IFormInput = {
   name: string;
   label: string;
-  defaultValue?: any;
+  group: string;
 };
 
 const CustomDatePicker: FC<IFormInput> = ({
   label,
   name,
-  defaultValue,
-  ...otherProps
+  group,
 }) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -21,9 +26,18 @@ const CustomDatePicker: FC<IFormInput> = ({
             <label className="form-label ">{label}</label>
           </span>
           <div className="input-icon mb-1">
-            <input type="date" className="form-control " id="datepicker-icon" />
+            <input
+              {...register(`${group}.${name}`)}
+              className={`form-control`}
+              type="date"
+              autoComplete="off"
+              name={`${group}.${name}`}
+            />
           </div>
         </div>
+        <div className="invalid-feedback">{`${
+          errors[group] ? errors[group]?.message : ""
+        }`}</div>
       </Grid>
     </Grid>
   );

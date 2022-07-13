@@ -24,14 +24,15 @@ export function useProductsContextValue(): ProductContextData {
 
   const fetchProducts = useCallback(
     (postData: Partial<PostData>) => {
-      let url: string = `${postData.hostname}:${postData.port}/${postData.endpoint}`;
 
       setIsLoading(true);
-      fetch(url, {
-        method: "GET",
+      fetch('/validate', {
+        method: "POST",
         headers: {
+          "Accept":"application/json",
           "Content-Type": "application/json",
         },
+        body:JSON.stringify(postData)
       })
         .then((response) => response.json())
         .then((fetchedProducts) => {

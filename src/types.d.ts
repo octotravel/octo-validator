@@ -33,19 +33,43 @@ export interface ProductTimeStamps {
     dateNotAvailable: Date;
     deliveryMethods: string;
 }
-
+export interface DateAvailable{
+    to:Date
+    from:Date
+}
 export type ProductContextData = {
     products: any[],
     isLoading: boolean;
     fetchProducts: (PostData) => void
 }
 
+
+interface Product {
+    productId: string;
+    optionId: string;
+    available: {
+      from: string;
+      to: string;
+    };
+    unavailable: {
+      from: string;
+      to: string;
+    };
+    deliveryMethods: DeliveryMethod[];
+  }
+
+  export enum CapabilityId {
+    Content = "octo/content",
+    Pricing = "octo/pricing",
+  }
+  export enum DeliveryMethod {
+    VOUCHER = "VOUCHER",
+    TICKET = "TICKET",
+  }
 export type PostData = {
-    hostname: string,
-    port: string,
-    endpoint:string,
-    capabilities: string,
-    productTimes: ProductTimeStamps[],
+  url: string;
+  capabilities: CapabilityId[];
+  supplierId: string;
+  productStartTimes: Product;
+  productOpeningHours: Product;
 }
-
-
