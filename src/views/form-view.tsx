@@ -7,15 +7,16 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { object, string, array, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomDatePicker from "../components.tsx/date-picker";
+import { useProductListManagement } from "../context/productContext";
 
 const querySchema = object({
   url: string().nonempty("Url is required").max(100),
   supplierId: string().nonempty("Supplier ID is required").max(100),
-  capabilities: array(string()).optional(),
+  capabilities: array(string()).nonempty("Atleast one is required"),
   productTimes: array(string()).nonempty("Atleast one is required"),
+  productId: string().nonempty("Product ID is required"),
   productTypes: object({
     deliveryMethods: array(string()).nonempty("Atleast one is required"),
-    productId: string().nonempty("Product ID is required"),
     available: object({ from: string(), to: string() }),
     unavailable: object({ from: string(), to: string() }),
   }),
@@ -24,6 +25,7 @@ const querySchema = object({
 export type QueryInput = TypeOf<typeof querySchema>;
 
 const FormInputView: FC = () => {
+  const {handleFetchProducts} = useProductListManagement()
   const methods = useForm<QueryInput>({
     resolver: zodResolver(querySchema),
     defaultValues: {
@@ -40,11 +42,11 @@ const FormInputView: FC = () => {
     formState: { errors },
   } = methods;
 
-  console.log( errors["productTypes"]);
+  
   
   //   const methods = useForm();
   const onSubmitHandler: SubmitHandler<QueryInput> = (values) => {
-    console.log(values);
+    handleFetchProducts(values)
     //  Executing the RegisterUser Mutation
     // registerUser(values);
   };
@@ -54,21 +56,20 @@ const FormInputView: FC = () => {
         <fieldset className=" bg-white form-fieldset">
           <Grid container className="py-2" spacing={4}>
             <Grid item xs={6}>
-              <FormInput label="Url" name="url" required={true} isNested={false}/>
+              <FormInput label="Url" name="url" required={true}/>
             </Grid>
             <Grid item xs={6}>
               <FormInput
                 label="Supplier ID"
                 name="supplierId"
                 required={true}
-                isNested={false}
               />
             </Grid>
           </Grid>
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <div className="mb-3 mt-1">
-                <label className="form-label">Capability</label>
+                <label className="form-label required">Capability</label>
                 <div className="form-selectgroup form-selectgroup-boxes d-flex flex-column">
                   {capability.map((list, index) => {
                     return (
@@ -81,6 +82,13 @@ const FormInputView: FC = () => {
                     );
                   })}
                 </div>
+                <small
+                  className={` ${
+                    !!errors["capabilities"] ? "text-danger" : ""
+                  }`}
+                >{`${
+                  errors["capabilities"] ? errors["capabilities"]?.message : ""
+                }`}</small>
               </div>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -110,7 +118,10 @@ const FormInputView: FC = () => {
           </Grid>
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
-              <FormInput required={true} label="Product ID" name="productTypes.productId" isNested={true} group='productTypes' nested='productId' />
+              <FormInput 
+              required={true} 
+              label="Product ID" 
+              name="productId" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <div className="mb-3 mt-2">

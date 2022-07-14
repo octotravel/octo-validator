@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { PostData, ProductContextData } from "../types";
+import { mockData } from "../utils/constant";
 
 export const productsContextDefaultValue: ProductContextData = {
   products: [],
@@ -26,16 +27,20 @@ export function useProductsContextValue(): ProductContextData {
     (postData: Partial<PostData>) => {
 
       setIsLoading(true);
-      fetch('/validate', {
+      console.log(mockData);
+      
+      fetch('http://localhost:3000/validate', {
         method: "POST",
         headers: {
-          "Accept":"application/json",
           "Content-Type": "application/json",
         },
-        body:JSON.stringify(postData)
+        body:JSON.stringify(mockData)
       })
         .then((response) => response.json())
         .then((fetchedProducts) => {
+          debugger
+          console.log(fetchedProducts);
+          
           setproducts(fetchedProducts);
         })
         .catch((err) => {
@@ -63,7 +68,7 @@ export function useProductListManagement() {
 
       fetchProducts(postData);
     },
-    [fetchProducts, products]
+    [fetchProducts]
   );
   return {
     handleFetchProducts,

@@ -45,7 +45,6 @@ export type ProductContextData = {
 
 
 interface Product {
-    productId: string;
     optionId: string;
     available: {
       from: string;
@@ -55,20 +54,14 @@ interface Product {
       from: string;
       to: string;
     };
-    deliveryMethods: DeliveryMethod[];
+    deliveryMethods: string[];
   }
 
-  export enum CapabilityId {
-    Content = "octo/content",
-    Pricing = "octo/pricing",
-  }
-  export enum DeliveryMethod {
-    VOUCHER = "VOUCHER",
-    TICKET = "TICKET",
-  }
+
 export type PostData = {
   url: string;
-  capabilities: CapabilityId[];
+  productId: string;
+  capabilities: string[];
   supplierId: string;
   productStartTimes: Product;
   productOpeningHours: Product;

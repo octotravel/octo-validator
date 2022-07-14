@@ -5,21 +5,13 @@ type IFormInput = {
   name: string;
   label: string;
   required: boolean;
-  isNested: boolean;
-  nested?:string;
-  group?:string;
+
 }
 
-const FormInput: FC<IFormInput> = ({ label, name, required,isNested,nested, group  }) => {
+const FormInput: FC<IFormInput> = ({ label, name, required  }) => {
   const { register, formState: { errors }, } = useFormContext();
 
- 
-//   let errorState=  isNested ? !!errors[name]: !!errors[name]
 
-//   console.log(registerState);
-//   console.log(!!errors[group]);
-  
-  
   return (
     <div className="mb-3 mt-2">
       <label className={`form-label ${required ? "required" : ""}`}>
@@ -32,7 +24,7 @@ const FormInput: FC<IFormInput> = ({ label, name, required,isNested,nested, grou
         name={name}
       />
 
-    <div className="invalid-feedback">{isNested? `${errors[name]?.nested ? errors[name]?.nested?.message : ''}`:`${errors[name] ? errors[name]?.message : ''}`}</div>
+    <div className="invalid-feedback">{`${errors[name] ? errors[name]?.message : ''}`}</div>
     </div>
   );
 };
