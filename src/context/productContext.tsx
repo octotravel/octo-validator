@@ -38,7 +38,7 @@ export function useProductsContextValue(): ProductContextData {
       })
         .then((response) => response.json())
         .then((fetchedProducts) => {
-          debugger
+        
           console.log(fetchedProducts);
           
           setproducts(fetchedProducts);

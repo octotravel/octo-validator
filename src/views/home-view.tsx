@@ -18,8 +18,8 @@ const HomeView: FC = () => {
             </Grid>
             <Grid item md={7} xs={12}>
               <OutputView/>
-              <div className="datagrid-title">Nameservers</div>
-              <div className="datagrid-content">Third Party</div>
+              {/* <div className="datagrid-title">Nameservers</div>
+              <div className="datagrid-content">Third Party</div> */}
             </Grid>
           </Grid>
         </Box>

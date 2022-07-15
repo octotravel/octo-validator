@@ -63,7 +63,7 @@ export const mockData={
     }
   }
 
-  const test=[
+  export const test=[
     {
         "name": "Supplier Flow",
         "success": true,

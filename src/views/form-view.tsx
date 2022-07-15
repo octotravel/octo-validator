@@ -55,10 +55,10 @@ const FormInputView: FC = () => {
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <fieldset className=" bg-white form-fieldset">
           <Grid container className="py-2" spacing={4}>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <FormInput label="Url" name="url" required={true}/>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <FormInput
                 label="Supplier ID"
                 name="supplierId"
@@ -116,6 +116,7 @@ const FormInputView: FC = () => {
               </div>
             </Grid>
           </Grid>
+          
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <FormInput 
