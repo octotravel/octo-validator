@@ -11,7 +11,7 @@ export const capability = [
 
 export const productTimes = [
     {
-        label: "start simes",
+        label: "start times",
         value: "productStartTimes",
     },
     {

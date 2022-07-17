@@ -3,14 +3,14 @@ import { Row, Col, Container } from "react-bootstrap";
 import { FC } from "react";
 import Header from "../components.tsx/header";
 import FormInputView from "./form-view";
-import OutputView from "./output-view";
+import OutputView from "./response-view";
 
 const HomeView: FC = () => {
   return (
     <>
       <Header title="Validation" />
       <Container>
-        <Row sx={{ flexGrow: 1 }}>
+        <Row>
           <Col md={5} xs={12}>
             <FormInputView />
           </Col>

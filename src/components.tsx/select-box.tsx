@@ -14,7 +14,6 @@ const SelectBox: FC<ISelectBox> = ({ label, value, group }) => {
   } = useFormContext();
 
   return (
-   
     <label className=" mb-3 form-selectgroup-item flex-fill">
       <input
         className={`form-selectgroup-input form-control ${!!errors[
@@ -35,7 +34,7 @@ const SelectBox: FC<ISelectBox> = ({ label, value, group }) => {
           </div>
         </div>
       </div>
-    </label> 
+    </label>
   );
 };
 

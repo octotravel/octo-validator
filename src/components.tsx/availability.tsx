@@ -5,7 +5,7 @@ import CustomDatePicker from "./date-picker";
 type IProps = {
   group: string;
   title: string;
-  name:string
+  name: string;
 };
 
 const Availability: FC<IProps> = ({ group, title }) => {

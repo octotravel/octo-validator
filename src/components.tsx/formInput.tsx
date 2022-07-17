@@ -7,18 +7,11 @@ type IFormInput = {
   required: boolean;
 };
 
-const FormInput: FC<IFormInput> = ({
-  label,
-  name,
-  required,
-}) => {
+const FormInput: FC<IFormInput> = ({ label, name, required }) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
-
-
-
 
   return (
     <div className="mb-3 mt-2">
