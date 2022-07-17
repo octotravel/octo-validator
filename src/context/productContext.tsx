@@ -5,8 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { PostData, ProductContextData } from "../types";
-import { mockData } from "../utils/constant";
+import { QueryPost, ProductContextData } from "../types";
 
 export const productsContextDefaultValue: ProductContextData = {
   products: [],
@@ -20,27 +19,23 @@ export const ProductContext = createContext<ProductContextData>(
 );
 
 export function useProductsContextValue(): ProductContextData {
-  const [products, setproducts] = useState<PostData[]>([]);
+  const [products, setproducts] = useState<QueryPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchProducts = useCallback(
-    (postData: Partial<PostData>) => {
+    (postData: Partial<QueryPost>) => {
 
       setIsLoading(true);
-      console.log(mockData);
       
       fetch('http://localhost:3000/validate', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body:JSON.stringify(mockData)
+        body:JSON.stringify(postData)
       })
         .then((response) => response.json())
-        .then((fetchedProducts) => {
-        
-          console.log(fetchedProducts);
-          
+        .then((fetchedProducts) => {          
           setproducts(fetchedProducts);
         })
         .catch((err) => {
@@ -60,11 +55,10 @@ export function useProductsContextValue(): ProductContextData {
 }
 
 export function useProductListManagement() {
-  const { products, fetchProducts }: ProductContextData =
+  const { products, fetchProducts,isLoading }: ProductContextData =
     useContext(ProductContext);
   const handleFetchProducts = useCallback(
-    (postData: Partial<PostData>) => {
-      console.log(postData);
+    (postData: Partial<QueryPost>) => {
 
       fetchProducts(postData);
     },
@@ -73,5 +67,6 @@ export function useProductListManagement() {
   return {
     handleFetchProducts,
     products,
+    isLoading
   };
 }

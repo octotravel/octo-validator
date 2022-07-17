@@ -1,21 +1,8 @@
 
 import React, { ReactNode, MouseEvent } from "react";
+import {CapabilityId,DeliveryMethod} from './schema/productSchema'
 
-
-export interface IButton {
-    children?: ReactNode;
-    props?: any;
-    onClick?:
-    | ((event: React.MouseEvent<HTMLButtonElement>) => void)
-    | undefined;
-
-}
-export interface IContext {
-    children?: ReactNode;
-}
-
-
-export interface Scenario {
+export type Scenario ={
     name: string;
     success: boolean;
     errors: string[];
@@ -27,16 +14,8 @@ export interface Flow {
     success: boolean;
     scenarios: Scenario[]
 }
-export interface ProductTimeStamps {
-    productId: string;
-    dateAvailable: Date;
-    dateNotAvailable: Date;
-    deliveryMethods: string;
-}
-export interface DateAvailable{
-    to:Date
-    from:Date
-}
+
+
 export type ProductContextData = {
     products: any[],
     isLoading: boolean;
@@ -45,7 +24,8 @@ export type ProductContextData = {
 
 
 interface Product {
-    optionId: string;
+    optionId:string|null
+    productId: string;
     available: {
       from: string;
       to: string;
@@ -60,9 +40,18 @@ interface Product {
 
 export type PostData = {
   url: string;
-  productId: string;
   capabilities: string[];
   supplierId: string;
+  product: Product;
+  productTimes:string[];
   productStartTimes: Product;
   productOpeningHours: Product;
+}
+
+export type QueryPost = {
+  url: string;
+  capabilities: string[];
+  supplierId: string;
+  productStartTimes: Product|null;
+  productOpeningHours: Product|null;
 }

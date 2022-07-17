@@ -1,28 +1,37 @@
-import { FC, useState } from "react";
-import { IconButton } from "@mui/material";
+import { FC } from "react";
+import { Accordion} from "react-bootstrap";
 import { Flow } from "../types";
-import { Box } from "@mui/system";
-import { ArrowDown, ArrowUp } from "../common/icons";
+import ReactJson from "react-json-view";
 
 type IListView = {
   flow: Flow;
+  id: string;
 };
 
-const ListView: FC<IListView> = ({ flow }) => {
-  const [arrow, setArrow] = useState(false);
-
+const ListView: FC<IListView> = ({ flow, id }) => {
   return (
-    <Box>
-      <div className=" mb-3 mr-3 py-2 text-capitalize">
-        <span className={`badge  ${flow.success ? "bg-green" : "bg-red"}`}>{`${
-          flow.success ? "SUCCESS" : "FAILED"
-        }`}</span>
-        <strong className="px-3">{flow.name}</strong>
-      </div>
-      <IconButton onClick={() => setArrow(!arrow)}>
-        {arrow ? <ArrowDown /> : <ArrowUp />}
-      </IconButton>
-    </Box>
+    <Accordion.Item eventKey={id}>
+      <Accordion.Header>
+{/* 
+        <div className=" text-capitalize"> */}
+        <div className="w-10">
+          <span
+            className={`badge w-10  ${flow.success ? "bg-green-lt" : "bg-red-lt"}`}
+          >{`${flow.success ? "SUCCESS" : "FAILED"}`}</span>
+          </div>
+          <label className=" px-3 text-muted">{flow.name}</label>
+        {/* </div> */}
+      </Accordion.Header>
+      <Accordion.Body>
+        <ReactJson
+          name={false}
+          displayObjectSize={false}
+          displayDataTypes={false}
+          enableClipboard={false}
+          src={flow.scenarios}
+        />
+      </Accordion.Body>
+    </Accordion.Item>
   );
 };
 

@@ -5,11 +5,19 @@ type IFormInput = {
   name: string;
   label: string;
   required: boolean;
+};
 
-}
+const FormInput: FC<IFormInput> = ({
+  label,
+  name,
+  required,
+}) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
-const FormInput: FC<IFormInput> = ({ label, name, required  }) => {
-  const { register, formState: { errors }, } = useFormContext();
+
 
 
   return (
@@ -18,13 +26,15 @@ const FormInput: FC<IFormInput> = ({ label, name, required  }) => {
         {label}
       </label>
       <input
-        {...register(`${name}`)}
-        className={`form-control ${!!errors[name] ? 'is-invalid' : ''}`}
+        {...register(name)}
+        className={`form-control ${!!errors[name] ? "is-invalid" : ""}`}
         autoComplete="off"
         name={name}
       />
 
-    <div className="invalid-feedback">{`${errors[name] ? errors[name]?.message : ''}`}</div>
+      <div className="invalid-feedback">{`${
+        errors[name] ? errors[name]?.message : ""
+      }`}</div>
     </div>
   );
 };

@@ -1,45 +1,71 @@
 import { FC } from "react";
-import { Grid } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { Col, Row } from "react-bootstrap";
 
+
+import { useFormContext } from "react-hook-form";
+// import { DateRangePicker } from "react-date-range";
+// import "react-date-range/dist/styles.css"; // main style file
+// import "react-date-range/dist/theme/default.css";
+import 'react-nice-dates/build/style.css'
 type IFormInput = {
-  name: string;
-  label: string;
   group: string;
+  titleG?:string;
 };
 
-const CustomDatePicker: FC<IFormInput> = ({
-  label,
-  name,
-  group,
-}) => {
+const CustomDatePicker: FC<IFormInput> = ({group,titleG }) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
+ 
+
+  
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
+    <Row className="mb-2">
+      
+       <Col xs={12} sm={6} md={12} lg={6}>
         <div className="form-group">
           <span>
-            <label className="form-label ">{label}</label>
+            <label className="form-label text-muted ">From</label>
           </span>
           <div className="input-icon mb-1">
             <input
-              {...register(`${group}.${name}`)}
-              className={`form-control`}
+              className={`form-control ${!!errors[group]
+                ?.from} ? 'is-invalid' : 'is-valid'}`}
+              {...register(`${group}.from`)}
               type="date"
               autoComplete="off"
-              name={`${group}.${name}`}
+              name={`${group}.from`}
             />
           </div>
         </div>
         <div className="invalid-feedback">{`${
-          errors[group] ? errors[group]?.message : ""
+          errors[group]?.from ? errors[group]?.from?.message : ""
         }`}</div>
-      </Grid>
-    </Grid>
+      </Col>
+
+      <Col xs={12} sm={6} md={12} lg={6}>
+        <div className="form-group">
+          <span>
+            <label className="form-label text-muted ">To</label>
+          </span>
+          <div className="input-icon mb-1">
+            <input
+              className={`form-control ${!!errors[group]
+                ?.from} ? 'is-invalid' : 'is-valid'}`}
+              {...register(`${group}.to`)}
+              type="date"
+              autoComplete="off"
+              name={`${group}.to`}
+            />
+          </div>
+        </div>
+        <div className="invalid-feedback">{`${
+          errors[group]?.to ? errors[group]?.to?.message : ""
+        }`}</div>
+      </Col> 
+    </Row>
   );
 };
 
