@@ -1,33 +1,19 @@
-// import {  Button } from "@mui/material";
 import { Col, Row, Button } from "react-bootstrap";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import FormInput from "../components.tsx/formInput";
 import SelectBox from "../components.tsx/select-box";
 import { capability, productTimes } from "../utils/constant";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-// import { object, string, array, TypeOf } from "zod";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useProductListManagement } from "../context/productContext";
 import ProductForm from "../components.tsx/product-form";
 import { PostData, QueryPost } from "../types";
 import { querySchema } from "../schema/productSchema";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// const querySchema = object({
-//   url: string().nonempty("Url is required").max(100),
-//   supplierId: string().nonempty("Supplier ID is required").max(100),
-//   capabilities: array(string()).nonempty("Atleast one is required"),
-//   productTimes: array(string()).nonempty("Atleast one is required"),
-//   productTypes: object({
-//     productId: string().nonempty("Product ID is required"),
-//     deliveryMethods: array(string()).nonempty("Atleast one is required"),
-//     available: object({ from: string(), to: string() }),
-//     unavailable: object({ from: string(), to: string() }),
-//   }),
-// });
-
-// export type QueryInput = TypeOf<typeof querySchema>;
 const FormInputView: FC = () => {
-  const { handleFetchProducts, isLoading } = useProductListManagement();
+  const { handleFetchProducts, error, isLoading } = useProductListManagement();
   const methods = useForm<PostData>({
     resolver: yupResolver(querySchema),
   });
@@ -37,17 +23,15 @@ const FormInputView: FC = () => {
     formState: { errors },
   } = methods;
 
-  // const watchProductTimes = watch("capabilities");
-  // console.log(watchProductTimes);
+  useEffect(() => {
+    if (error) {
+      toast.error(error as any, {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    }
+  }, [ error]);
 
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) =>
-  //     console.log(value, name, type)
-  //   );
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
-
-  //   const methods = useForm();
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
     const queryData: QueryPost = {
       url: values.url,
@@ -66,6 +50,7 @@ const FormInputView: FC = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <fieldset className=" bg-white form-fieldset">
+          <ToastContainer />
           <Row className="py-2" spacing={4}>
             <Col xs={12} sm={6} md={12} lg={6}>
               <FormInput label="Url" name="url" required={true} />

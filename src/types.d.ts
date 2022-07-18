@@ -17,8 +17,9 @@ export interface Flow {
 
 
 export type ProductContextData = {
-    products: any[],
+    products: Flow[],
     isLoading: boolean;
+    error:string,
     fetchProducts: (PostData) => void
 }
 

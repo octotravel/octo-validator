@@ -5,11 +5,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { QueryPost, ProductContextData } from "../types";
+import { QueryPost, ProductContextData, Flow } from "../types";
 
 export const productsContextDefaultValue: ProductContextData = {
   products: [],
   isLoading: false,
+  error: "",
   fetchProducts: () => null,
 };
 
@@ -19,27 +20,37 @@ export const ProductContext = createContext<ProductContextData>(
 );
 
 export function useProductsContextValue(): ProductContextData {
-  const [products, setproducts] = useState<QueryPost[]>([]);
+  const [products, setproducts] = useState<Flow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const fetchProducts = useCallback(
     (postData: Partial<QueryPost>) => {
-
       setIsLoading(true);
-      
-      fetch('http://localhost:3000/validate', {
+      //TODO: edge cases handling
+      fetch("http://localhost:3000/validate", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body:JSON.stringify(postData)
+        body: JSON.stringify(postData),
       })
-        .then((response) => response.json())
-        .then((fetchedProducts) => {          
+        .then((response) => {
+          if (!response.ok) {
+            const errorMessage = {
+              code: 403,
+              message: "Invalid request!, please try again.",
+            };
+            throw errorMessage;
+          }
+          return response.json();
+        })
+        .then((fetchedProducts) => {
           setproducts(fetchedProducts);
         })
         .catch((err) => {
-          console.log(err);
+          setError(err?.message);
         })
         .finally(() => {
           setIsLoading(false);
@@ -49,17 +60,16 @@ export function useProductsContextValue(): ProductContextData {
   );
 
   return useMemo(
-    () => ({ products, isLoading, fetchProducts }),
-    [products, isLoading, fetchProducts]
+    () => ({ products, error, isLoading, fetchProducts }),
+    [products, isLoading, error, fetchProducts]
   );
 }
 
 export function useProductListManagement() {
-  const { products, fetchProducts,isLoading }: ProductContextData =
+  const { products, fetchProducts, isLoading, error }: ProductContextData =
     useContext(ProductContext);
   const handleFetchProducts = useCallback(
     (postData: Partial<QueryPost>) => {
-
       fetchProducts(postData);
     },
     [fetchProducts]
@@ -67,6 +77,7 @@ export function useProductListManagement() {
   return {
     handleFetchProducts,
     products,
-    isLoading
+    isLoading,
+    error,
   };
 }
