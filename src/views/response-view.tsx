@@ -18,9 +18,9 @@ const OutputView: FC = () => {
   return (
     <div className="mb-3">
       <div className=" card h-full w-full ">
-        <div className="card-header">
+        {/* <div className="card-header">
           <h3 className="  font-normal text-lg">Response</h3>
-        </div>
+        </div> */}
         <div className="card-body">
           {products.length > 0 ? (
             <Accordion flush>
@@ -47,7 +47,14 @@ const OutputView: FC = () => {
               </Accordion.Item>
             </Accordion>
           ) : (
-            <div className="text-center mb-3 text-muted">No response body</div>
+            <div className="empty">
+
+  <p className="empty-title">No response body </p>
+  <p className="empty-subtitle text-muted">
+    Try adjusting your search or filter to get products.
+  </p>
+  
+</div>
           )}
         </div>
       </div>
