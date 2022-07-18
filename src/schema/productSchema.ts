@@ -6,6 +6,36 @@ export enum DeliveryMethod {
   TICKET = "TICKET",
 }
 
+const productSchema = yup.object().shape({
+  productId: yup.string().required("This field is required"),
+  optionId: yup.string().default("DEFAULT").optional(),
+  available: yup
+    .object()
+    .shape({
+      from: yup.string().required(),
+      to: yup.string().required(),
+    })
+    .required(),
+  unavailable: yup
+    .object()
+    .shape({
+      from: yup.string().required(),
+      to: yup.string().required(),
+    })
+    .required(),
+  deliveryMethods: yup
+    .array(
+      yup
+        .mixed()
+        .oneOf(Object.values(DeliveryMethod), {
+          message: "Atleast one is required",
+        })
+        .required()
+    )
+    .min(1)
+    .ensure(),
+}).default(null);
+
 export const querySchema: yup.SchemaOf<PostData> = yup
   .object()
   .shape({
@@ -14,48 +44,19 @@ export const querySchema: yup.SchemaOf<PostData> = yup
       .array()
       .nullable(true)
       .required("Atleast one is required"),
-    capabilities: yup
-      .array()
-      .nullable(true)
-      .required("Atleast one is required"),
+    capabilities: yup.array().nullable(true).default([]).optional(),
     supplierId: yup.string().required("This field is required"),
-    product: yup.object().when("productTimes", {
+    productStartTimes: yup.object().nullable(true).default(null).when("productTimes", {
       is: (val: string[]) => {
-        return val?.length > 0;
+        return val?.includes("productStartTimes");
       },
-      then: yup
-        .object()
-        .shape({
-          productId: yup.string().required("This field is required"),
-          optionId: yup.string().default("DEFAULT").optional(),
-          available: yup
-            .object()
-            .shape({
-              from: yup.string().required(),
-              to: yup.string().required(),
-            })
-            .required(),
-          unavailable: yup
-            .object()
-            .shape({
-              from: yup.string().required(),
-              to: yup.string().required(),
-            })
-            .required(),
-          deliveryMethods: yup
-            .array(
-              yup
-                .mixed()
-                .oneOf(Object.values(DeliveryMethod), {
-                  message: "Atleast one is required",
-                })
-                .required()
-            )
-            .min(1)
-            .ensure(),
-        })
-        .nullable(true)
-        .defined(),
+      then: productSchema,
+    }),
+    productOpeningHours: yup.object().nullable(true).default(null).when("productTimes", {
+      is: (val: string[]) => {
+        return val?.includes("productOpeningHours");
+      },
+      then: productSchema,
     }),
   })
   .test(

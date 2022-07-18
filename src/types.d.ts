@@ -43,16 +43,8 @@ export type PostData = {
   url: string;
   capabilities: string[];
   supplierId: string;
-  product: Product;
   productTimes:string[];
-  productStartTimes: Product;
-  productOpeningHours: Product;
-}
-
-export type QueryPost = {
-  url: string;
-  capabilities: string[];
-  supplierId: string;
   productStartTimes: Product|null;
   productOpeningHours: Product|null;
 }
+

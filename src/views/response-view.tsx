@@ -17,7 +17,7 @@ const OutputView: FC = () => {
 
   return (
     <div className="mb-3">
-      <div className=" card h-full w-full ">
+      <div className="card w-full" style={{minHeight:'240px'}}>
         {/* <div className="card-header">
           <h3 className="  font-normal text-lg">Response</h3>
         </div> */}
@@ -48,13 +48,11 @@ const OutputView: FC = () => {
             </Accordion>
           ) : (
             <div className="empty">
-
-  <p className="empty-title">No response body </p>
-  <p className="empty-subtitle text-muted">
-    Try adjusting your search or filter to get products.
-  </p>
-  
-</div>
+              <p className="empty-title">No results body </p>
+              <p className="empty-subtitle text-muted">
+                Try adjusting your search or filter to get products.
+              </p>
+            </div>
           )}
         </div>
       </div>

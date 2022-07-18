@@ -6,31 +6,37 @@ import SelectBox from "./select-box";
 import Availability from "./availability";
 import { useFormContext } from "react-hook-form";
 
-const ProductForm: FC = () => {
+type IProductForm = {
+  fieldName: string;
+};
+
+const ProductForm: FC<IProductForm> = ({ fieldName }) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
-    
 
   return (
     <>
+      <label  className='form-label'>{`${
+        fieldName === "productStartTimes" ? "Start Times:" : "Opening Hours:"
+      }`}</label>
       <Row spacing={4}>
         <Col xs={12} sm={6} md={12} lg={6}>
           <div className="mb-3 mt-2">
             <label className={`form-label "required" : ""}`}>Product ID</label>
             <input
-              {...register("product.productId")}
+              {...register(`${fieldName}.productId`)}
               className={`form-control ${
-                !!errors[`product`]?.productId ? "is-invalid" : ""
+                !!errors[fieldName]?.productId ? "is-invalid" : ""
               }`}
               autoComplete="off"
-              name="product.productId"
+              name={`${fieldName}.productId`}
             />
 
             <div className="invalid-feedback">{`${
-              errors[`product`]?.productId
-                ? errors[`product`]?.productId?.message
+              errors[fieldName]?.productId
+                ? errors[fieldName]?.productId?.message
                 : ""
             }`}</div>
           </div>
@@ -44,7 +50,7 @@ const ProductForm: FC = () => {
                   <SelectBox
                     label={list.label}
                     value={list.value}
-                    group="product.deliveryMethods"
+                    group={`${fieldName}.deliveryMethods`}
                     key={index}
                   />
                 );
@@ -52,21 +58,26 @@ const ProductForm: FC = () => {
             </div>
             <small
               className={` ${
-                !!errors["product"]?.deliveryMethods
-                  ? "text-danger"
-                  : ""
+                !!errors[fieldName]?.deliveryMethods ? "text-danger" : ""
               }`}
             >{`${
-              errors["product"]?.deliveryMethods
-                ? errors["product"]?.deliveryMethods[0]?.message
-                    ?.message
+              errors[fieldName]?.deliveryMethods
+                ? errors[fieldName]?.deliveryMethods?.message
                 : ""
             }`}</small>
           </div>
         </Col>
       </Row>
-      <Availability title="Available" group="product.available" name='available'/>
-      <Availability title="Unavailable" group="product.unavailable"  name='unavailable' />
+      <Availability
+        title="Available"
+        group={`${fieldName}.available`}
+        name="available"
+      />
+      <Availability
+        title="Unavailable"
+        group={`${fieldName}.unavailable`}
+        name="unavailable"
+      />
     </>
   );
 };

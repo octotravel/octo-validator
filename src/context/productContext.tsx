@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { QueryPost, ProductContextData, Flow } from "../types";
+import {  ProductContextData, Flow, PostData } from "../types";
 
 export const productsContextDefaultValue: ProductContextData = {
   products: [],
@@ -25,7 +25,7 @@ export function useProductsContextValue(): ProductContextData {
   const [error, setError] = useState("");
 
   const fetchProducts = useCallback(
-    (postData: Partial<QueryPost>) => {
+    (postData: Partial<PostData>) => {
       setIsLoading(true);
       //TODO: edge cases handling
       fetch("http://localhost:3000/validate", {
@@ -69,7 +69,7 @@ export function useProductListManagement() {
   const { products, fetchProducts, isLoading, error }: ProductContextData =
     useContext(ProductContext);
   const handleFetchProducts = useCallback(
-    (postData: Partial<QueryPost>) => {
+    (postData: Partial<PostData>) => {
       fetchProducts(postData);
     },
     [fetchProducts]
