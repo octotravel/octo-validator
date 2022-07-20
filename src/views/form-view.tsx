@@ -8,76 +8,64 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useProductListManagement } from "../context/productContext";
 import ProductForm from "../components.tsx/product-form";
 import { PostData } from "../types";
-import { querySchema } from "../schema/productSchema";
+import initialValues, { querySchema } from "../schema/productSchema";
+import * as R from 'ramda';
 import { ToastContainer, toast } from "react-toastify";
 // import useFormPersist from 'react-hook-form-persist'
 import "react-toastify/dist/ReactToastify.css";
 
-// const FORM_DATA_KEY = "app_form_local_data";
-// const initialValues:PostData={
-//   url:'',
-//   capabilities:[],
-//   supplierId: '',
-//   product: {
-//     deliveryMethods:[],
-//     optionId:'DEFAULT',
-//     productId:'',
-//     available:{
-//       from:'',
-//       to:''
-//     },
-//     unavailable:{
-//       from:'',
-//       to:''
-//     }
-//   },
-//   productTimes:[],
-//   productStartTimes: null,
-//   productOpeningHours: null,
-// }
+const FORM_DATA_KEY = "app_form_local_data";
+
+interface IProps {
+  value: any;
+  localStorageKey: any;
+}
+
+const usePersistForm = ({ value, localStorageKey }: IProps) => {
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(value));
+  }, [value, localStorageKey]);
+
+  return;
+};
+
 const FormInputView: FC = () => {
   const { handleFetchProducts, error, isLoading } = useProductListManagement();
 
-  // const getSavedData = useCallback(() => {
-  //   let data = localStorage.getItem(FORM_DATA_KEY);
-  //   if (data) {
-  //    // Parse it to a javaScript object
-  //     try {
-  //       data = JSON.parse(data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //     return data;
-  //   }
-  //   return initialValues;
-  // }, [initialValues]);
+  const getSavedData = useCallback(() => {
+    let data = localStorage.getItem(FORM_DATA_KEY);
+    if (data) {
+      // Parse it to a javaScript object
+      try {
+        console.log(JSON.parse(data));
+
+        data = JSON.parse(data);
+      } catch (err) {
+        console.log(err);
+      }
+      return data;
+    }
+    return initialValues;
+  }, []);
 
   const methods = useForm<PostData>({
     resolver: yupResolver(querySchema),
-    // defaultValues: {
-    //   productOpeningHours:null,
-    //   productStartTimes:null
-    // }
+    defaultValues: getSavedData(),
   });
 
   const {
     handleSubmit,
     watch,
     resetField,
-    setValue,
+    getValues,
     formState: { errors },
   } = methods;
 
-  // useFormPersist("storageKey", {
-  //   watch,
-  //   setValue,
-  //   storage: window.localStorage
-  // });
+  usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });
+
   const watchStartTimes = watch("productTimes");
 
   useEffect(() => {
-    // console.log(watchStartTimes);
-
     if (watchStartTimes && !watchStartTimes.includes("productOpeningHours")) {
       resetField("productOpeningHours");
     } else if (
@@ -86,7 +74,7 @@ const FormInputView: FC = () => {
     ) {
       resetField("productStartTimes");
     }
-  }, [watchStartTimes]);
+  }, [watchStartTimes, resetField]);
 
   useEffect(() => {
     if (error) {
@@ -100,17 +88,8 @@ const FormInputView: FC = () => {
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
     const { productTimes, ...newValues } = values;
     console.log(newValues);
-    // const queryData: QueryPost = {
-    //   url: values.url,
-    //   supplierId: values.supplierId,
-    //   productOpeningHours: values.productTimes.includes("productOpeningHours")
-    //     ? values.product
-    //     : null,
-    //   productStartTimes: values.productTimes.includes("productStartTimes")
-    //     ? values.product
-    //     : null,
-    //   capabilities: values.capabilities,
-    // };
+
+    localStorage.removeItem(FORM_DATA_KEY);
     handleFetchProducts(newValues);
   };
   return (
@@ -173,7 +152,7 @@ const FormInputView: FC = () => {
               </div>
             </Col>
           </Row>
-          {watchStartTimes?.length > 0 && (
+          {!R.isNil(watchStartTimes) && (
             <div>
               {watchStartTimes.map((field, index) => {
                 return <ProductForm key={field} fieldName={field} />;

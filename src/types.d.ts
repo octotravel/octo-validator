@@ -1,6 +1,10 @@
 
 import React, { ReactNode, MouseEvent } from "react";
 import {CapabilityId,DeliveryMethod} from './schema/productSchema'
+export type JsonKey = string | number;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type JsonValue = any;
+export type Json = JsonValue | Record<JsonKey, JsonValue>;
 
 export type Scenario ={
     name: string;

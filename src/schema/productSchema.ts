@@ -66,3 +66,15 @@ export const querySchema: yup.SchemaOf<PostData> = yup
       value.productOpeningHours !== null || value.productStartTimes !== null
   )
   .required();
+
+  const initialValues:any={
+      url:'',
+      capabilities:[],
+      supplierId: '',
+      productTimes:[],
+      productStartTimes: null,
+      productOpeningHours: null,
+  
+  }
+  
+  export default initialValues;
