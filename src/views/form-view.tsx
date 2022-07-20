@@ -1,5 +1,5 @@
 import { Col, Row, Button } from "react-bootstrap";
-import { FC, useCallback, useEffect } from "react";
+import { FC, useEffect } from "react";
 import FormInput from "../components.tsx/formInput";
 import SelectBox from "../components.tsx/select-box";
 import { capability, productTimes } from "../utils/constant";
@@ -8,60 +8,33 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useProductListManagement } from "../context/productContext";
 import ProductForm from "../components.tsx/product-form";
 import { PostData } from "../types";
-import initialValues, { querySchema } from "../schema/productSchema";
-import * as R from 'ramda';
+import  { querySchema } from "../schema/productSchema";
+import * as R from "ramda";
 import { ToastContainer, toast } from "react-toastify";
-// import useFormPersist from 'react-hook-form-persist'
+import { usePersistForm } from "../components.tsx/use-persit-form";
 import "react-toastify/dist/ReactToastify.css";
-
-const FORM_DATA_KEY = "app_form_local_data";
-
-interface IProps {
-  value: any;
-  localStorageKey: any;
-}
-
-const usePersistForm = ({ value, localStorageKey }: IProps) => {
-  useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(value));
-  }, [value, localStorageKey]);
-
-  return;
-};
 
 const FormInputView: FC = () => {
   const { handleFetchProducts, error, isLoading } = useProductListManagement();
 
-  const getSavedData = useCallback(() => {
-    let data = localStorage.getItem(FORM_DATA_KEY);
-    if (data) {
-      // Parse it to a javaScript object
-      try {
-        console.log(JSON.parse(data));
-
-        data = JSON.parse(data);
-      } catch (err) {
-        console.log(err);
-      }
-      return data;
-    }
-    return initialValues;
-  }, []);
-
   const methods = useForm<PostData>({
     resolver: yupResolver(querySchema),
-    defaultValues: getSavedData(),
   });
 
   const {
     handleSubmit,
     watch,
     resetField,
-    getValues,
+    setValue,
     formState: { errors },
   } = methods;
 
-  usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });
+  usePersistForm<PostData>({
+    formName: "FORM_DATA_KEY",
+    watch,
+    setValue,
+    shouldDirty: true
+  });
 
   const watchStartTimes = watch("productTimes");
 
@@ -87,9 +60,7 @@ const FormInputView: FC = () => {
 
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
     const { productTimes, ...newValues } = values;
-    console.log(newValues);
 
-    localStorage.removeItem(FORM_DATA_KEY);
     handleFetchProducts(newValues);
   };
   return (
@@ -154,9 +125,10 @@ const FormInputView: FC = () => {
           </Row>
           {!R.isNil(watchStartTimes) && (
             <div>
-              {watchStartTimes.map((field, index) => {
-                return <ProductForm key={field} fieldName={field} />;
-              })}
+              {watchStartTimes &&
+                watchStartTimes?.map((field, index) => {
+                  return <ProductForm key={field} fieldName={field} />;
+                })}
             </div>
           )}
 

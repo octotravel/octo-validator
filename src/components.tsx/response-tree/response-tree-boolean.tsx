@@ -13,7 +13,7 @@ const ResponseTreeBoolean:FC<Props> = ({ attr = false, last = true, level = 0, v
   return (
     <>
       {!attr && spacer}
-      <span className={`hljs-literal ${ value===true?'text-green':'text-red'}`}>{JSON.stringify(value)}</span>
+      <span className={`hljs-literal ${ value===true?'text-success':'text-danger'}`}>{JSON.stringify(value)}</span>
       {!last && ','}
       {'\n'}
     </>

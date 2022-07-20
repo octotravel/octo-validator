@@ -2,10 +2,7 @@ import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 
 import { useFormContext } from "react-hook-form";
-// import { DateRangePicker } from "react-date-range";
-// import "react-date-range/dist/styles.css"; // main style file
-// import "react-date-range/dist/theme/default.css";
-// import 'react-nice-dates/build/style.css'
+
 type IFormInput = {
   group: string;
   titleG?: string;

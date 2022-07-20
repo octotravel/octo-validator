@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import {  ProductContextData, Flow, PostData } from "../types";
+import { ProductContextData, Flow, PostData } from "../types";
 
 export const productsContextDefaultValue: ProductContextData = {
   products: [],
@@ -27,7 +27,7 @@ export function useProductsContextValue(): ProductContextData {
   const fetchProducts = useCallback(
     (postData: Partial<PostData>) => {
       setIsLoading(true);
-      //TODO: edge cases handling
+
       fetch("http://localhost:3000/validate", {
         method: "POST",
         headers: {
