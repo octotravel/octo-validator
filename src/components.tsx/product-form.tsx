@@ -70,12 +70,12 @@ const ProductForm: FC<IProductForm> = ({ fieldName }) => {
       </Row>
       <Availability
         title="Available"
-        group={`${fieldName}.available`}
+        group={`${fieldName}`}
         name="available"
       />
       <Availability
         title="Unavailable"
-        group={`${fieldName}.unavailable`}
+        group={`${fieldName}`}
         name="unavailable"
       />
     </>

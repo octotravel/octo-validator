@@ -5,14 +5,26 @@ import { useFormContext } from "react-hook-form";
 
 type IFormInput = {
   group: string;
-  titleG?: string;
+  name?: string;
 };
 
-const CustomDatePicker: FC<IFormInput> = ({ group, titleG }) => {
+const CustomDatePicker: FC<IFormInput> = ({ group, name }) => {
   const {
     register,
+    watch,
     formState: { errors },
   } = useFormContext();
+
+  const errorTo =
+    name === "available"
+      ? errors[group]?.available?.to
+      : errors[group]?.unavailable?.to;
+  const errorFrom =
+    name === "available"
+      ? errors[group]?.available?.from
+      : errors[group]?.unavailable?.from;
+
+  const startDate = watch(`${group}.${name}.from`);
 
   return (
     <Row className="mb-2">
@@ -23,18 +35,20 @@ const CustomDatePicker: FC<IFormInput> = ({ group, titleG }) => {
           </span>
           <div className="input-icon mb-1">
             <input
-              className={`form-control ${!!errors[group]
-                ?.from} ? 'is-invalid' : 'is-valid'}`}
-              {...register(`${group}.from`)}
+              className={`form-control ${!!errorFrom} ? 'is-invalid' : 'is-valid'}`}
+              {...register(`${group}.${name}.from`)}
               type="date"
               autoComplete="off"
-              name={`${group}.from`}
+              name={`${group}.${name}.from`}
             />
           </div>
         </div>
-        <div className="invalid-feedback">{`${
-          errors[group]?.from ? errors[group]?.from?.message : ""
-        }`}</div>
+        <small className={` ${!!errorFrom ? "text-danger" : ""}`}>{`${
+          errorFrom ? errorFrom?.message : ""
+        }`}</small>
+        {/* <div className="invalid-feedback">{`${
+          errorFrom ? errorFrom?.message : ""
+        }`}</div> */}
       </Col>
 
       <Col xs={12} sm={6} md={12} lg={6}>
@@ -44,18 +58,21 @@ const CustomDatePicker: FC<IFormInput> = ({ group, titleG }) => {
           </span>
           <div className="input-icon mb-1">
             <input
-              className={`form-control ${!!errors[group]
-                ?.from} ? 'is-invalid' : 'is-valid'}`}
-              {...register(`${group}.to`)}
+              className={`form-control ${!!errorTo} ? 'text-danger' : 'is-valid'}`}
+              {...register(`${group}.${name}.to`)}
               type="date"
               autoComplete="off"
-              name={`${group}.to`}
+              name={`${group}.${name}.to`}
+              min={startDate}
             />
           </div>
         </div>
-        <div className="invalid-feedback">{`${
-          errors[group]?.to ? errors[group]?.to?.message : ""
-        }`}</div>
+        <small className={` ${!!errorTo ? "text-danger" : ""}`}>{`${
+          errorTo ? errorTo?.message : ""
+        }`}</small>
+        {/* <div className="invalid-feedback">{`${
+          errorTo ? errorTo?.message : ""
+        }`}</div> */}
       </Col>
     </Row>
   );

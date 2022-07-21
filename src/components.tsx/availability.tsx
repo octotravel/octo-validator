@@ -8,14 +8,14 @@ type IProps = {
   name: string;
 };
 
-const Availability: FC<IProps> = ({ group, title }) => {
+const Availability: FC<IProps> = ({ group, title, name }) => {
   return (
     <Row spacing={4}>
       <Col xs={12}>
         <div className="mb-3">
           <label className="form-label">{title}</label>
 
-          <CustomDatePicker group={group} />
+          <CustomDatePicker group={group} name={name} />
         </div>
       </Col>
     </Row>

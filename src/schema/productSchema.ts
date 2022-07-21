@@ -12,15 +12,15 @@ const productSchema = yup.object().shape({
   available: yup
     .object()
     .shape({
-      from: yup.string().required(),
-      to: yup.string().required(),
+      from: yup.string().required("This field is required"),
+      to: yup.string().required("This field is required"),
     })
     .required(),
   unavailable: yup
     .object()
     .shape({
-      from: yup.string().required(),
-      to: yup.string().required(),
+      from: yup.string().required("This field is required"),
+      to: yup.string().required("This field is required"),
     })
     .required(),
   deliveryMethods: yup
