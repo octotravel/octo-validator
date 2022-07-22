@@ -8,11 +8,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useProductListManagement } from "../context/productContext";
 import ProductForm from "../components.tsx/product-form";
 import { PostData } from "../types";
-import  { querySchema } from "../schema/productSchema";
+import { querySchema } from "../schema/productSchema";
 import * as R from "ramda";
 import { ToastContainer, toast } from "react-toastify";
 import { usePersistForm } from "../components.tsx/use-persit-form";
 import "react-toastify/dist/ReactToastify.css";
+
+
+export function checkProperties(object:any):any {
+  return Object.values(object).every(v => v && typeof v === 'object'
+      ? checkProperties(v)
+      : v === "" || v === null || v === false
+  );
+}
+
+
 
 const FormInputView: FC = () => {
   const { handleFetchProducts, error, isLoading } = useProductListManagement();
@@ -33,20 +43,79 @@ const FormInputView: FC = () => {
     formName: "FORM_DATA_KEY",
     watch,
     setValue,
-    shouldDirty: true
+    shouldDirty: true,
   });
 
   const watchStartTimes = watch("productTimes");
 
   useEffect(() => {
-    if (watchStartTimes && !watchStartTimes.includes("productOpeningHours")) {
+    const getSessionStorage = () => window.sessionStorage;
+    const storage = JSON.parse(
+      getSessionStorage().getItem("FORM_DATA_KEY") || "{}"
+    );
+
+    const checkStartTimes= storage.productStartTimes&& checkProperties(storage.productStartTimes)
+    const checkOpeningHours= storage.productOpeningHours&& checkProperties(storage.productOpeningHours)
+    // console.log(checkProperties(storage.productStartTimes));
+    // if(checkOpeningHours){
+    //   resetField("productOpeningHours");
+    // }else{
+    //   setValue("productOpeningHours", storage?.productOpeningHours);
+    // }
+    // if(checkOpeningHours){
+    //   resetField("productOpeningHours");
+    // }else{
+    //   setValue("productOpeningHours", storage?.productOpeningHours);
+    // }
+
+    if (watchStartTimes && watchStartTimes.includes("productOpeningHours")) {
+      if (checkOpeningHours) {
+        console.log('yes');
+        
+        setValue("productOpeningHours", storage?.productOpeningHours);
+      }
+    } else if (
+      watchStartTimes &&
+      !watchStartTimes.includes("productOpeningHours")
+    ) {
+      console.log('no');
       resetField("productOpeningHours");
+    }
+    if (watchStartTimes && watchStartTimes.includes("productStartTimes")) {
+      if (checkStartTimes) {
+        console.log('yes, yes');
+        setValue("productStartTimes", storage?.productStartTimes);
+      }
     } else if (
       watchStartTimes &&
       !watchStartTimes.includes("productStartTimes")
     ) {
+      console.log('no, no');
       resetField("productStartTimes");
     }
+
+    // if (watchStartTimes && !watchStartTimes.includes("productOpeningHours")) {
+    //   if(storage.productOpeningHours){
+    //     setValue('productOpeningHours',storage?.productOpeningHours )
+    //     console.log('no');
+    //   }else{
+    //     console.log('no no');
+    //     resetField("productOpeningHours");
+    //   }
+
+    // } else if (
+    //   watchStartTimes &&
+    //   !watchStartTimes.includes("productStartTimes")
+    // ) {
+    //   if(storage.productOpeningHours){
+    //     console.log('yes');
+
+    //     setValue('productStartTimes',storage?.productStartTimes )
+    //   }else{
+    //     resetField("productStartTimes");
+    //   }
+
+    // }
   }, [watchStartTimes, resetField]);
 
   useEffect(() => {
@@ -60,6 +129,7 @@ const FormInputView: FC = () => {
 
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
     const { productTimes, ...newValues } = values;
+    console.log(newValues);
 
     handleFetchProducts(newValues);
   };

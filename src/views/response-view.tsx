@@ -7,17 +7,23 @@ import ListView from "../components.tsx/list-view";
 const OutputView: FC = () => {
   const { products } = useProductListManagement();
   const flowData: Flow[] = products && products;
+  const totalScenarios = flowData?.reduce(
+    (count, current) => count + current.scenarios.length,
+    0
+  );
 
-  const successCount =
+  const successScenarios =
     flowData.length > 0
-      ? flowData?.filter(function (item) {
-          return item.success === true;
-        }).length
+      ? flowData
+          ?.map((item) => {
+            return item.scenarios.filter((el) => el.success === true).length;
+          })
+          .reduce((sum, current) => sum + current, 0)
       : "";
 
   return (
     <div className="mb-3">
-      <div className="card w-full" style={{minHeight:'240px'}}>
+      <div className="card w-full" style={{ minHeight: "240px" }}>
         {/* <div className="card-header">
           <h3 className="  font-normal text-lg">Response</h3>
         </div> */}
@@ -27,7 +33,7 @@ const OutputView: FC = () => {
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
                   <div className=" mr-3  py-2 text-capitalize">
-                    <span>{`${successCount}/${products.length}`}</span>
+                    <span>{`${successScenarios}/${totalScenarios}`}</span>
                     <strong className="px-3">GET PRODUCT</strong>
                   </div>
                 </Accordion.Header>

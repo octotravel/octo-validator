@@ -1,19 +1,17 @@
 import { FC } from "react";
 import { Accordion } from "react-bootstrap";
 import { Flow } from "../types";
-import * as R from 'ramda';
-import ReponseTreeJson from "./response-tree/response-tree-json";
+import ResponeTree from "./response-tree";
 
 type IListView = {
   flow: Flow;
   id: string;
-  className?:string;
 };
 
-const ListView: FC<IListView> = ({ flow, id, className='' }) => {
+const ListView: FC<IListView> = ({ flow, id }) => {
   return (
     <Accordion.Item eventKey={id}>
-      <Accordion.Header as='div' className="shadow-sm">
+      <Accordion.Header as="div" className="shadow-sm">
         <div>
           <span
             className={`badge   ${
@@ -24,20 +22,17 @@ const ListView: FC<IListView> = ({ flow, id, className='' }) => {
         <label className=" px-3 text-muted">{flow.name}</label>
       </Accordion.Header>
       <Accordion.Body as="div" className="h-25 .bg-gradient overflow-auto">
-  
-          <pre  className={`px-3 py-2 text-muted`}
-      style={{
-        background: 'transparent',
-        border: 'none',
-        margin: 0,
-        height: "40vh" ,
-        whiteSpace: 'pre',
-       
-      }}>
-          <code >
-          {!R.isNil(flow) && <ReponseTreeJson value={flow} />}
-          </code>
-          </pre>
+        <Accordion as="div" className=" h-50 bg-light">
+          {flow?.scenarios.map((scenerio, index) => {
+            return (
+              <ResponeTree
+                key={index}
+                id={index.toString()}
+                flow={scenerio}
+              />
+            );
+          })}
+        </Accordion>
       </Accordion.Body>
     </Accordion.Item>
   );

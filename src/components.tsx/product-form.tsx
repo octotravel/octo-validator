@@ -15,6 +15,8 @@ const ProductForm: FC<IProductForm> = ({ fieldName }) => {
     register,
     formState: { errors },
   } = useFormContext();
+  // console.log( errors[fieldName]?.deliveryMethods?.message);
+  
 
   return (
     <>
@@ -24,7 +26,7 @@ const ProductForm: FC<IProductForm> = ({ fieldName }) => {
       <Row spacing={4}>
         <Col xs={12} sm={6} md={12} lg={6}>
           <div className="mb-3 mt-2">
-            <label className={`form-label "required" : ""}`}>Product ID</label>
+            <label className='form-label required'>Product ID</label>
             <input
               {...register(`${fieldName}.productId`)}
               className={`form-control ${
@@ -42,6 +44,20 @@ const ProductForm: FC<IProductForm> = ({ fieldName }) => {
           </div>
         </Col>
         <Col xs={12} sm={6} md={12} lg={6}>
+          <div className="mb-3 mt-2">
+            <label className='form-label'>Optional ID</label>
+            <input
+              {...register(`${fieldName}.optionId`)}
+              className='form-control'
+              autoComplete="off"
+              name={`${fieldName}.optionId`}
+            />
+          </div>
+        </Col>
+        
+      </Row>
+      <Row>
+      <Col xs={12} sm={6} md={12} lg={6}>
           <div className="mb-3 mt-2">
             <label className="form-label required">Delevery Methods</label>
             <div className="form-selectgroup form-selectgroup-boxes d-flex flex-column">
