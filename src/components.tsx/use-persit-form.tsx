@@ -13,7 +13,7 @@ interface UsePersistFormProps<T = unknown> {
   watch: UseFormWatch<PostData>;
   setValue: (
     name: any,
-    value:any,
+    value: any,
     // value: UnpackNestedValue<FieldPathValue<FieldValues, any>>,
     options?: SetValueConfig
   ) => void;
@@ -36,8 +36,6 @@ export const usePersistForm = <T = unknown,>(
 
   const currentValue = watch();
   const getSessionStorage = () => window.sessionStorage;
-  const productStartTimesWatcher=currentValue&&currentValue.productTimes?.includes('productStartTimes')
-  const productOpeningHoursWatcher=currentValue&&currentValue.productTimes?.includes('productOpeningHours')
   useEffect(() => {
     const storage = getSessionStorage().getItem(formName);
     let restoredData: any = {
@@ -58,17 +56,9 @@ export const usePersistForm = <T = unknown,>(
       }
       if (onRestored) onRestored(restoredData);
     }
-  }, [formName, setValue, shouldValidate, shouldDirty,onRestored]);
+  }, [formName, setValue, shouldValidate, shouldDirty, onRestored]);
 
   useEffect(() => {
-    console.log(currentValue);
-    if(!productStartTimesWatcher){
-        const {productStartTimes, ...newValues}=currentValue
-        getSessionStorage().setItem(formName, JSON.stringify(newValues));
-    }else if(!productOpeningHoursWatcher){
-      const {productOpeningHours, ...newValues}=currentValue
-      getSessionStorage().setItem(formName, JSON.stringify(newValues));
-    }
     getSessionStorage().setItem(formName, JSON.stringify(currentValue));
   });
 };

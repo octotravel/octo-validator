@@ -27,6 +27,7 @@ export function useProductsContextValue(): ProductContextData {
   const fetchProducts = useCallback(
     (postData: Partial<PostData>) => {
       setIsLoading(true);
+console.log(postData);
 
       fetch("http://localhost:3000/validate", {
         method: "POST",
@@ -34,9 +35,11 @@ export function useProductsContextValue(): ProductContextData {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(postData),
+        body: JSON.parse(JSON.stringify(postData)),
       })
         .then((response) => {
+          console.log(response);
+          
           if (!response.ok) {
             const errorMessage = {
               code: 403,

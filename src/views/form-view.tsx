@@ -14,15 +14,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { usePersistForm } from "../components.tsx/use-persit-form";
 import "react-toastify/dist/ReactToastify.css";
 
-
-export function checkProperties(object:any):any {
-  return Object.values(object).every(v => v && typeof v === 'object'
-      ? checkProperties(v)
-      : v === "" || v === null || v === false
-  );
-}
-
-
+// export function checkProperties(object: any): any {
+//   return Object.values(object).every((v) =>
+//     v && typeof v === "object"
+//       ? checkProperties(v)
+//       : v === "" || v === null || v === false
+//   );
+// }
 
 const FormInputView: FC = () => {
   const { handleFetchProducts, error, isLoading } = useProductListManagement();
@@ -34,7 +32,6 @@ const FormInputView: FC = () => {
   const {
     handleSubmit,
     watch,
-    resetField,
     setValue,
     formState: { errors },
   } = methods;
@@ -49,76 +46,6 @@ const FormInputView: FC = () => {
   const watchStartTimes = watch("productTimes");
 
   useEffect(() => {
-    const getSessionStorage = () => window.sessionStorage;
-    const storage = JSON.parse(
-      getSessionStorage().getItem("FORM_DATA_KEY") || "{}"
-    );
-
-    const checkStartTimes= storage.productStartTimes&& checkProperties(storage.productStartTimes)
-    const checkOpeningHours= storage.productOpeningHours&& checkProperties(storage.productOpeningHours)
-    // console.log(checkProperties(storage.productStartTimes));
-    // if(checkOpeningHours){
-    //   resetField("productOpeningHours");
-    // }else{
-    //   setValue("productOpeningHours", storage?.productOpeningHours);
-    // }
-    // if(checkOpeningHours){
-    //   resetField("productOpeningHours");
-    // }else{
-    //   setValue("productOpeningHours", storage?.productOpeningHours);
-    // }
-
-    if (watchStartTimes && watchStartTimes.includes("productOpeningHours")) {
-      if (checkOpeningHours) {
-        console.log('yes');
-        
-        setValue("productOpeningHours", storage?.productOpeningHours);
-      }
-    } else if (
-      watchStartTimes &&
-      !watchStartTimes.includes("productOpeningHours")
-    ) {
-      console.log('no');
-      resetField("productOpeningHours");
-    }
-    if (watchStartTimes && watchStartTimes.includes("productStartTimes")) {
-      if (checkStartTimes) {
-        console.log('yes, yes');
-        setValue("productStartTimes", storage?.productStartTimes);
-      }
-    } else if (
-      watchStartTimes &&
-      !watchStartTimes.includes("productStartTimes")
-    ) {
-      console.log('no, no');
-      resetField("productStartTimes");
-    }
-
-    // if (watchStartTimes && !watchStartTimes.includes("productOpeningHours")) {
-    //   if(storage.productOpeningHours){
-    //     setValue('productOpeningHours',storage?.productOpeningHours )
-    //     console.log('no');
-    //   }else{
-    //     console.log('no no');
-    //     resetField("productOpeningHours");
-    //   }
-
-    // } else if (
-    //   watchStartTimes &&
-    //   !watchStartTimes.includes("productStartTimes")
-    // ) {
-    //   if(storage.productOpeningHours){
-    //     console.log('yes');
-
-    //     setValue('productStartTimes',storage?.productStartTimes )
-    //   }else{
-    //     resetField("productStartTimes");
-    //   }
-
-    // }
-  }, [watchStartTimes, resetField]);
-
-  useEffect(() => {
     if (error) {
       toast.error(error as any, {
         position: "top-right",
@@ -129,7 +56,15 @@ const FormInputView: FC = () => {
 
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
     const { productTimes, ...newValues } = values;
-    console.log(newValues);
+
+    if (!productTimes?.includes("productOpeningHours")) {
+      newValues.productOpeningHours = null;
+    }
+    if (!productTimes?.includes("productStartTimes")) {
+      newValues.productStartTimes = null;
+    }
+
+    // console.log(newValues);
 
     handleFetchProducts(newValues);
   };
