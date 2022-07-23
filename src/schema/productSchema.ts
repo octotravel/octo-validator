@@ -60,8 +60,8 @@ export const querySchema: yup.SchemaOf<PostData> = yup
   .object()
   .shape({
     url: yup.string().required("This field is required"),
-    productTimes: yup
-      .array()
+    productType: yup
+      .array().min(1,"Atleast one is required")
       .nullable(true)
       .required("Atleast one is required"),
     capabilities: yup.array().default([]).optional(),
@@ -70,7 +70,7 @@ export const querySchema: yup.SchemaOf<PostData> = yup
       .object()
       .nullable(true)
       .default(null)
-      .when("productTimes", {
+      .when("productType", {
         is: (val: string[]) => {
           return val?.includes("productStartTimes");
         },
@@ -80,7 +80,7 @@ export const querySchema: yup.SchemaOf<PostData> = yup
       .object()
       .nullable(true)
       .default(null)
-      .when("productTimes", {
+      .when("productType", {
         is: (val: string[]) => {
           return val?.includes("productOpeningHours");
         },

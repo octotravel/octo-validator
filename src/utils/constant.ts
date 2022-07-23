@@ -9,7 +9,7 @@ export const capability = [
     },
 ];
 
-export const productTimes = [
+export const productTypeData = [
     {
         label: "start times",
         value: "productStartTimes",

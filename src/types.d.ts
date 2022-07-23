@@ -47,7 +47,7 @@ export type PostData = {
   url: string;
   capabilities: string[];
   supplierId: string;
-  productTimes:string[];
+  productType:string[];
   productStartTimes: Product|null;
   productOpeningHours: Product|null;
 }

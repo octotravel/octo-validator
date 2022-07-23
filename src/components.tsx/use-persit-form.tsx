@@ -44,7 +44,7 @@ export const usePersistForm = <T = unknown,>(
       capabilities: [],
       supplierId: "",
       url: "",
-      productTimes: [],
+      productType: [],
     };
 
     if (storage) {

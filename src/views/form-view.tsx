@@ -2,7 +2,7 @@ import { Col, Row, Button } from "react-bootstrap";
 import { FC, useEffect } from "react";
 import FormInput from "../components.tsx/formInput";
 import SelectBox from "../components.tsx/select-box";
-import { capability, productTimes } from "../utils/constant";
+import { capability, productTypeData } from "../utils/constant";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useProductListManagement } from "../context/productContext";
@@ -43,7 +43,7 @@ const FormInputView: FC = () => {
     shouldDirty: true,
   });
 
-  const watchStartTimes = watch("productTimes");
+  const watchStartTimes = watch("productType");
 
   useEffect(() => {
     if (error) {
@@ -55,12 +55,12 @@ const FormInputView: FC = () => {
   }, [error]);
 
   const onSubmitHandler: SubmitHandler<PostData> = (values) => {
-    const { productTimes, ...newValues } = values;
+    const { productType, ...newValues } = values;
 
-    if (!productTimes?.includes("productOpeningHours")) {
+    if (!productType?.includes("productOpeningHours")) {
       newValues.productOpeningHours = null;
     }
-    if (!productTimes?.includes("productStartTimes")) {
+    if (!productType?.includes("productStartTimes")) {
       newValues.productStartTimes = null;
     }
 
@@ -107,23 +107,21 @@ const FormInputView: FC = () => {
               <div className="mb-3 mt-1">
                 <label className="form-label required">Product Times</label>
                 <div className="form-selectgroup form-selectgroup-boxes d-flex flex-column">
-                  {productTimes.map((list, index) => {
+                  {productTypeData.map((list, index) => {
                     return (
                       <SelectBox
                         label={list.label}
                         value={list.value}
-                        group="productTimes"
+                        group="productType"
                         key={index}
                       />
                     );
                   })}
                 </div>
                 <small
-                  className={` ${
-                    !!errors["productTimes"] ? "text-danger" : ""
-                  }`}
+                  className={` ${!!errors["productType"] ? "text-danger" : ""}`}
                 >{`${
-                  errors["productTimes"] ? errors["productTimes"]?.message : ""
+                  errors["productType"] ? errors["productType"]?.message : ""
                 }`}</small>
               </div>
             </Col>
